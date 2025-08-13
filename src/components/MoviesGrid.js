@@ -3,18 +3,11 @@ import "../styles.css";
 import MovieCard from "./MovieCard";
 import NoResult from "./NoResult";
 
-export default function MoviesGrid() {
-  const [movies, setMovies] = useState([]);
+export default function MoviesGrid({ movies, watchlist, toggleWatchlist }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [inputValue, setInputValue] = useState("");
   const [genre, setGenre] = useState("All Genres");
   const [rating, setRating] = useState("All Ratings");
-
-  useEffect(() => {
-    fetch("movies.json")
-      .then((response) => response.json())
-      .then((data) => setMovies(data));
-  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -113,7 +106,12 @@ export default function MoviesGrid() {
       <div className="movies-grid">
         {filteredMovies.length > 0 ? (
           filteredMovies.map((movie) => (
-            <MovieCard movie={movie} key={movie.id} />
+            <MovieCard
+              movie={movie}
+              key={movie.id}
+              isWatchlisted={watchlist.includes(movie.id)}
+              toggleWatchlist={toggleWatchlist}
+            />
           ))
         ) : (
           <NoResult message="No movies found." />
